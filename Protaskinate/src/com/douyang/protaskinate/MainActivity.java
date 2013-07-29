@@ -8,6 +8,7 @@ import com.douyang.db.TaskTable;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -120,7 +121,7 @@ public class MainActivity extends Activity implements LoaderCallbacks<Cursor>{
 		String [] from = new String [] {TaskTable.COLUMN_SUMMARY};
 		int [] to = new int [] {R.id.textView1};
 		getLoaderManager().initLoader(0, null, this);
-		adapter = new SimpleCursorAdapter(this, R.layout.task_row, null, from, to, 0);
+		adapter = new MyCursorAdapter(this, R.layout.task_row, null, from, to, 0);
 		
 		listViewTasks.setAdapter(adapter);
 		
@@ -128,8 +129,10 @@ public class MainActivity extends Activity implements LoaderCallbacks<Cursor>{
 		listViewTasks.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
+			public void onItemClick(AdapterView<?> a, View v, int position,
+					long id) {
+				
+
 				Log.e("TASK", "listitemclicked");
 				
 			}
@@ -167,14 +170,26 @@ public class MainActivity extends Activity implements LoaderCallbacks<Cursor>{
 		Log.e("TASK", "onCreateContextMenu");
 		if(v.getId() == R.id.listView1)
 		{
-			AdapterView.AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
+
 			menu.setHeaderTitle("test");
 			menu.add(0, DELETE_ID, 0, "delete");
 		}
 	}
 
-	public void onClick() {
+	public void onCheck(final View v) {
+		Handler handler = new Handler();
+		handler.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				long id = (Long) v.getTag();
+				Uri uri = Uri.parse(MyTaskContentProvider.CONTENT_URI + "/" + id);
+				getContentResolver().delete(uri, null, null);
+				fillData();
+			}
+		}, 500);
 
+		Log.e("TASK", "onClick : ");
 	}
 
 
