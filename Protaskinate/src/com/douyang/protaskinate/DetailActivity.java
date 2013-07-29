@@ -19,4 +19,4 @@ public class DetailActivity extends Activity {
 		return true;
 	}
 
-}
+} 
