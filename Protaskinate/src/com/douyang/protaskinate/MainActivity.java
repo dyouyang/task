@@ -131,7 +131,7 @@ public class MainActivity extends Activity implements LoaderCallbacks<Cursor>{
 			@Override
 			public void onItemClick(AdapterView<?> a, View v, int position,
 					long id) {
-				
+				//Code for what happens on a short click on listItem goes here.
 
 				Log.e("TASK", "listitemclicked");
 				
@@ -149,6 +149,11 @@ public class MainActivity extends Activity implements LoaderCallbacks<Cursor>{
 	
 	
 
+	/*
+	 * (non-Javadoc)
+	 * delete based on the row ID
+	 * @see android.app.Activity#onContextItemSelected(android.view.MenuItem)
+	 */
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		switch(item.getItemId()){
@@ -163,7 +168,7 @@ public class MainActivity extends Activity implements LoaderCallbacks<Cursor>{
 		
 	}
 
-	//long press on list item
+	//long press on list item, opens up a context menu with a delete action
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
@@ -176,12 +181,21 @@ public class MainActivity extends Activity implements LoaderCallbacks<Cursor>{
 		}
 	}
 
+	/**
+	 * 
+	 * When a checkBox is checked.
+	 * @param v
+	 */
 	public void onCheck(final View v) {
 		Handler handler = new Handler();
 		handler.postDelayed(new Runnable() {
 			
 			@Override
 			public void run() {
+				/*
+				 * get the tag from the checkBox, which is set in the cursor to be the row ID
+				 * Then delete based on the row ID after a short delay
+				 */
 				long id = (Long) v.getTag();
 				Uri uri = Uri.parse(MyTaskContentProvider.CONTENT_URI + "/" + id);
 				getContentResolver().delete(uri, null, null);

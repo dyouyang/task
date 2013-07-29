@@ -15,6 +15,11 @@ public class MyCursorAdapter extends SimpleCursorAdapter {
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * 
+	 * We're using bindView to add a tag to the checkBox in each row that gives it the row ID.
+	 * The row ID is needed in the uri during delete.
+	 */
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
 		CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox1);
