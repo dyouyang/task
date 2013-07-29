@@ -16,8 +16,15 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Loader;
 import android.database.Cursor;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -29,9 +36,10 @@ public class MainActivity extends Activity implements LoaderCallbacks<Cursor>{
 	private SimpleCursorAdapter adapter;
 	private ListView listViewTasks;
 	
+	private static final int DELETE_ID = Menu.FIRST + 1;
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-
+		Log.e("","onOptions");
 		switch (item.getItemId()) {
 		case R.id.action_add:
 
@@ -104,7 +112,8 @@ public class MainActivity extends Activity implements LoaderCallbacks<Cursor>{
 		setContentView(R.layout.activity_main);
 		listViewTasks = (ListView) findViewById(R.id.listView1);
 		fillData();
-		//TODO registerForContextMenu(listViewTasks);
+		registerForContextMenu(listViewTasks);
+		listViewTasks.setClickable(true);
 	}
 
 	private void fillData() {
@@ -114,6 +123,18 @@ public class MainActivity extends Activity implements LoaderCallbacks<Cursor>{
 		adapter = new SimpleCursorAdapter(this, R.layout.task_row, null, from, to, 0);
 		
 		listViewTasks.setAdapter(adapter);
+		
+		//short press on list item
+		listViewTasks.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				Log.e("TASK", "listitemclicked");
+				
+			}
+			
+		});
 	}
 
 	@Override
@@ -121,6 +142,35 @@ public class MainActivity extends Activity implements LoaderCallbacks<Cursor>{
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+	
+	
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		switch(item.getItemId()){
+		case DELETE_ID:
+			AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+			Uri uri = Uri.parse(MyTaskContentProvider.CONTENT_URI + "/" + info.id);
+			getContentResolver().delete(uri, null, null);
+			fillData();
+			return true;
+		}
+		return super.onContextItemSelected(item);
+		
+	}
+
+	//long press on list item
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		Log.e("TASK", "onCreateContextMenu");
+		if(v.getId() == R.id.listView1)
+		{
+			AdapterView.AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
+			menu.setHeaderTitle("test");
+			menu.add(0, DELETE_ID, 0, "delete");
+		}
 	}
 
 	public void onClick() {

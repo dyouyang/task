@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.text.TextUtils;
 
 public class MyTaskContentProvider extends ContentProvider {
 
@@ -34,9 +35,33 @@ public class MyTaskContentProvider extends ContentProvider {
 	}
 
 	@Override
-	public int delete(Uri arg0, String arg1, String[] arg2) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int delete(Uri uri, String selection, String[] selectionArgs) {
+		int uriType = sURIMatcher.match(uri);
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+		int rowsDeleted = 0;
+		
+		switch(uriType){
+		case TASKS:
+			rowsDeleted = db.delete(TaskTable.TABLE_TASK, selection, selectionArgs);
+			break;
+		case TASK_ID:
+			String id = uri.getLastPathSegment();
+			if(TextUtils.isEmpty(selection))
+			{
+				rowsDeleted = db.delete(TaskTable.TABLE_TASK, TaskTable.COLUMN_ID + "=" + id, null);
+			}
+			else
+			{
+				rowsDeleted = db.delete(TaskTable.TABLE_TASK, TaskTable.COLUMN_ID + "=" + id + " and " + selection, selectionArgs);
+			}
+			break;
+			default:
+				throw new IllegalArgumentException("Unknown URI: " + uri);
+				
+		
+		}
+		getContext().getContentResolver().notifyChange(uri, null);
+		return rowsDeleted;
 	}
 
 	@Override
