@@ -112,6 +112,7 @@ public class MainActivity extends Activity implements LoaderCallbacks<Cursor>{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		listViewTasks = (ListView) findViewById(R.id.listView1);
+		//populate the list
 		fillData();
 		registerForContextMenu(listViewTasks);
 		listViewTasks.setClickable(true);
