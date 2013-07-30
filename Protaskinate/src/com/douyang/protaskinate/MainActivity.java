@@ -15,6 +15,7 @@ import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.util.Log;
@@ -116,6 +117,23 @@ public class MainActivity extends Activity implements LoaderCallbacks<Cursor>{
 		fillData();
 		registerForContextMenu(listViewTasks);
 		listViewTasks.setClickable(true);
+		
+		//short press on list item
+		listViewTasks.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> a, View v, int position,
+					long id) {
+				Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+				Uri taskUri = Uri.parse(MyTaskContentProvider.CONTENT_URI + "/" + id);
+				intent.putExtra(MyTaskContentProvider.CONTENT_ITEM_TYPE, taskUri);
+				startActivity(intent);
+				
+				Log.e("TASK", "listitemclicked");
+				
+			}
+			
+		});
 	}
 
 	private void fillData() {
@@ -126,19 +144,7 @@ public class MainActivity extends Activity implements LoaderCallbacks<Cursor>{
 		
 		listViewTasks.setAdapter(adapter);
 		
-		//short press on list item
-		listViewTasks.setOnItemClickListener(new OnItemClickListener() {
 
-			@Override
-			public void onItemClick(AdapterView<?> a, View v, int position,
-					long id) {
-				//Code for what happens on a short click on listItem goes here.
-
-				Log.e("TASK", "listitemclicked");
-				
-			}
-			
-		});
 	}
 
 	@Override
@@ -183,7 +189,7 @@ public class MainActivity extends Activity implements LoaderCallbacks<Cursor>{
 	}
 
 	/**
-	 * 
+	 * TODO: mark the checked task as completed, delete later explicitly
 	 * When a checkBox is checked.
 	 * @param v
 	 */
