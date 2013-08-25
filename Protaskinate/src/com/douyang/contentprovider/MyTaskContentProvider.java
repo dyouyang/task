@@ -130,10 +130,30 @@ public class MyTaskContentProvider extends ContentProvider {
 	}
 
 	@Override
-	public int update(Uri arg0, ContentValues arg1, String arg2, String[] arg3) {
-		// TODO Auto-generated method stub
-		
-		return 0;
+	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+		int uriType = sURIMatcher.match(uri);
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+		int rowsUpdated = 0;
+		switch(uriType){
+		case TASKS:
+			rowsUpdated = db.update(TaskTable.TABLE_TASK, values, selection, selectionArgs);
+			break;
+		case TASK_ID:
+			String id = uri.getLastPathSegment();
+			if(TextUtils.isEmpty(selection))
+			{
+				rowsUpdated = db.update(TaskTable.TABLE_TASK, values, TaskTable.COLUMN_ID + "=" + id, null);
+			}
+			else
+			{
+				rowsUpdated = db.update(TaskTable.TABLE_TASK, values, TaskTable.COLUMN_ID + "=" + id + " and " + selection, selectionArgs);
+			}
+			break;
+			default:
+				throw new IllegalArgumentException("Unknown URI: " + uri);
+		}
+		getContext().getContentResolver().notifyChange(uri, null);
+		return rowsUpdated;
 	}
 	
 	private void checkColumns(String [] projection){
