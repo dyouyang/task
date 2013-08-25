@@ -14,28 +14,32 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+/**
+ * @author yinglong The task detail activity, which handles new tasks or editing
+ *         existing tasks
+ */
 public class DetailActivity extends Activity {
 
 	private Uri taskUri;
-	EditText edit_text;
+	EditText task_summary;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_detail);
 
-		edit_text = (EditText) findViewById(R.id.editText1);
+		task_summary = (EditText) findViewById(R.id.editText1);
 
 		Bundle extras = getIntent().getExtras();
 
-		// Get from saved state
+		// Getting data from previous instance
 		if (savedInstanceState == null)
 			taskUri = null;
 		else
 			taskUri = savedInstanceState
 					.getParcelable(MyTaskContentProvider.CONTENT_ITEM_TYPE);
 
-		// get from other activity
+		// Getting data from other activity
 		if (extras != null) {
 			taskUri = extras
 					.getParcelable(MyTaskContentProvider.CONTENT_ITEM_TYPE);
@@ -47,8 +51,11 @@ public class DetailActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+
+		// Save action checks to see if the required fields are present, and if
+		// so finishes the activity
 		case R.id.action_save:
-			if (TextUtils.isEmpty(edit_text.getText().toString())) {
+			if (TextUtils.isEmpty(task_summary.getText().toString())) {
 				showEmptySummaryToast();
 				return true;
 			} else {
@@ -62,8 +69,8 @@ public class DetailActivity extends Activity {
 	}
 
 	/**
-	 * fills the task fields on this activity with the task clicked on list
-	 * activity
+	 * fills the task fields on this activity with the data in task clicked on
+	 * in list activity
 	 * 
 	 * @param uri
 	 */
@@ -75,7 +82,7 @@ public class DetailActivity extends Activity {
 
 		if (cursor != null) {
 			cursor.moveToFirst();
-			edit_text.setText(cursor.getString(cursor
+			task_summary.setText(cursor.getString(cursor
 					.getColumnIndexOrThrow(TaskTable.COLUMN_SUMMARY)));
 		}
 
@@ -103,10 +110,15 @@ public class DetailActivity extends Activity {
 		saveState();
 	}
 
+	/**
+	 * Saves the updated data to the DB, but only if the required fields are
+	 * present. If they aren't make no changes. Should be called whenever the
+	 * detail activity finishes.
+	 */
 	private void saveState() {
-		String summary = edit_text.getText().toString();
+		String summary = task_summary.getText().toString();
 
-		//if summary is empty don't make any changes
+		// if summary is empty don't make any changes
 		if (TextUtils.isEmpty(summary)) {
 			return;
 		}
@@ -124,6 +136,9 @@ public class DetailActivity extends Activity {
 
 	}
 
+	/**
+	 * Alert the user if they try to Save a task where the summary is empty
+	 */
 	private void showEmptySummaryToast() {
 		Toast.makeText(DetailActivity.this, R.string.summary_cannot_be_empty,
 				Toast.LENGTH_LONG).show();

@@ -8,4 +8,5 @@
     <string name="title_activity_detail">DetailActivity</string>
     <string name="action_save">Save</string>
 	<string name="summary_cannot_be_empty">Summary cannot be empty</string>
+	<string name="task_summary_hint">Task summary</string>
 </resources>

@@ -14,8 +14,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:maxLines="1" 
-        android:singleLine="true">
+        android:hint="@string/task_summary_hint"
+        android:maxLines="1"
+        android:singleLine="true" >
 
         <requestFocus />
     </EditText>
