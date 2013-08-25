@@ -8,9 +8,11 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class DetailActivity extends Activity {
 
@@ -46,9 +48,14 @@ public class DetailActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_save:
-			setResult(RESULT_OK);
-			finish();
-			return true;
+			if (TextUtils.isEmpty(edit_text.getText().toString())) {
+				showEmptySummaryToast();
+				return true;
+			} else {
+				setResult(RESULT_OK);
+				finish();
+				return true;
+			}
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -99,16 +106,27 @@ public class DetailActivity extends Activity {
 	private void saveState() {
 		String summary = edit_text.getText().toString();
 
+		//if summary is empty don't make any changes
+		if (TextUtils.isEmpty(summary)) {
+			return;
+		}
+
 		ContentValues values = new ContentValues();
 		values.put(TaskTable.COLUMN_SUMMARY, summary);
-	    values.put(TaskTable.COLUMN_CATEGORY, "category");
-	    values.put(TaskTable.COLUMN_DESCRIPTION, "description");
-	    
+		values.put(TaskTable.COLUMN_CATEGORY, "category");
+		values.put(TaskTable.COLUMN_DESCRIPTION, "description");
+
 		if (taskUri == null)
-			taskUri = getContentResolver().insert(MyTaskContentProvider.CONTENT_URI, values);
+			taskUri = getContentResolver().insert(
+					MyTaskContentProvider.CONTENT_URI, values);
 		else
 			getContentResolver().update(taskUri, values, null, null);
 
+	}
+
+	private void showEmptySummaryToast() {
+		Toast.makeText(DetailActivity.this, R.string.summary_cannot_be_empty,
+				Toast.LENGTH_LONG).show();
 	}
 
 }
