@@ -8,6 +8,7 @@
     <item 
         android:id="@+id/action_add"
         android:showAsAction="ifRoom"
+        android:icon="@drawable/icon_new_light"
         android:title="@string/action_add" 
          />"
 
