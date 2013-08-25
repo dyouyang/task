@@ -44,64 +44,8 @@ public class MainActivity extends Activity implements LoaderCallbacks<Cursor>{
 		Log.e("","onOptions");
 		switch (item.getItemId()) {
 		case R.id.action_add:
-
-			AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
-			alert.setTitle("Title");
-			alert.setMessage("Message");
-
-			// Set an EditText view to get user input
-			final EditText input = new EditText(this);
-			alert.setView(input);
-
-			alert.setPositiveButton("Ok",
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog,
-								int whichButton) {
-							String summary = input.getText().toString();
-							
-
-							//start insert to DB
-						   // String category = (String) mCategory.getSelectedItem();
-						    //String summary = mTitleText.getText().toString();
-						    //String description = mBodyText.getText().toString();
-
-						    // Only save if either summary or description
-						    // is available
-
-						    
-
-						    ContentValues values = new ContentValues();
-						    values.put(TaskTable.COLUMN_CATEGORY, "category");
-						    values.put(TaskTable.COLUMN_SUMMARY, summary);
-						    values.put(TaskTable.COLUMN_DESCRIPTION, "description");
-						    Uri taskUri = null;
-						    
-						    if (taskUri == null) {
-						      // New todo
-						      taskUri = getContentResolver().insert(MyTaskContentProvider.CONTENT_URI, values);
-						    } else {
-						      // Update todo
-						      getContentResolver().update(taskUri, values, null, null);
-						    }
-						    
-						    
-						    
-						}
-					});
-
-			alert.setNegativeButton("Cancel",
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog,
-								int whichButton) {
-							// Canceled.
-						}
-					});
-
-			alert.show();
-			// see
-			// http://androidsnippets.com/prompt-user-input-with-an-alertdialog
-			
+			Intent i = new Intent(this, DetailActivity.class);
+		    startActivity(i);
 
 		default:
 			return super.onOptionsItemSelected(item);
@@ -126,9 +70,10 @@ public class MainActivity extends Activity implements LoaderCallbacks<Cursor>{
 					long id) {
 				Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
 				Uri taskUri = Uri.parse(MyTaskContentProvider.CONTENT_URI + "/" + id);
+
 				intent.putExtra(MyTaskContentProvider.CONTENT_ITEM_TYPE, taskUri);
 				startActivity(intent);
-				
+
 				Log.e("TASK", "listitemclicked");
 				
 			}
