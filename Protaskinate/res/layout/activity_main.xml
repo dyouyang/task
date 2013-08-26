@@ -22,6 +22,7 @@
         android:dividerHeight="0dp" />
 
     <fragment
+        android:id="@+id/main_fragment"
         android:name="com.douyang.protaskinate.MainFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

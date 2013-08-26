@@ -6,7 +6,6 @@ import com.douyang.db.TaskTable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
@@ -70,11 +69,13 @@ public class MainFragment extends Fragment implements LoaderCallbacks<Cursor> {
 						taskUri);
 				startActivity(intent);
 
-				Log.d("TASK", "listitemclicked");
+				//Log.d("TASK", "listitemclicked");
 
 			}
 
 		});
+		
+
 		
 		return view;
 	}

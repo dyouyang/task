@@ -30,7 +30,7 @@
         <provider
             android:name="com.douyang.contentprovider.MyTaskContentProvider"
             android:authorities="com.douyang.contentprovider"
-            android:exported="true">"
+            android:exported="false">"
         </provider>
     </application>
 
