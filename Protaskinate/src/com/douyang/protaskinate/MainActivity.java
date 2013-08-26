@@ -28,10 +28,9 @@ import android.widget.SimpleCursorAdapter;
  * @author yinglong The main listView activity that displays all current tasks.
  * 
  */
-public class MainActivity extends Activity implements LoaderCallbacks<Cursor> {
+public class MainActivity extends Activity {
 
-	private SimpleCursorAdapter adapter;
-	private ListView listViewTasks;
+
 
 	private static final int DELETE_ID = Menu.FIRST + 1;
 
@@ -54,49 +53,10 @@ public class MainActivity extends Activity implements LoaderCallbacks<Cursor> {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		listViewTasks = (ListView) findViewById(R.id.listView1);
-
-		// populate the list
-		fillData();
-		registerForContextMenu(listViewTasks);
-		listViewTasks.setClickable(true);
-
-		// short press on list item opens up detail activity, passing along the
-		// content provider uri
-		listViewTasks.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> a, View v, int position,
-					long id) {
-				Intent intent = new Intent(getApplicationContext(),
-						DetailActivity.class);
-				Uri taskUri = Uri.parse(MyTaskContentProvider.CONTENT_URI + "/"
-						+ id);
-
-				intent.putExtra(MyTaskContentProvider.CONTENT_ITEM_TYPE,
-						taskUri);
-				startActivity(intent);
-
-				Log.d("TASK", "listitemclicked");
-
-			}
-
-		});
-	}
-
-	/**
-	 * Helper function used to map the task summaries to the listview
-	 */
-	private void fillData() {
-		String[] from = new String[] { TaskTable.COLUMN_SUMMARY };
-		int[] to = new int[] { R.id.textView1 };
-		getLoaderManager().initLoader(0, null, this);
-		adapter = new MyCursorAdapter(this, R.layout.task_row, null, from, to,
-				0);
-
-		listViewTasks.setAdapter(adapter);
 
 	}
+
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -105,35 +65,7 @@ public class MainActivity extends Activity implements LoaderCallbacks<Cursor> {
 		return true;
 	}
 
-	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		
-		//handle a delete action from the context menu by deleting through content provider
-		case DELETE_ID:
-			AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
-					.getMenuInfo();
-			Uri uri = Uri.parse(MyTaskContentProvider.CONTENT_URI + "/"
-					+ info.id);
-			getContentResolver().delete(uri, null, null);
-			fillData();
-			return true;
-		}
-		return super.onContextItemSelected(item);
-
-	}
 	
-	
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v,
-			ContextMenuInfo menuInfo) {
-		Log.e("TASK", "onCreateContextMenu");
-		if (v.getId() == R.id.listView1) {
-
-			menu.setHeaderTitle("test");
-			menu.add(0, DELETE_ID, 0, "delete");
-		}
-	}
 
 	/**
 	 * TODO: mark the checked task as completed, delete later explicitly When a
@@ -144,45 +76,9 @@ public class MainActivity extends Activity implements LoaderCallbacks<Cursor> {
 	 * @param v 
 	 */
 	public void onCheck(final View v) {
-		Handler handler = new Handler();
-		handler.postDelayed(new Runnable() {
-
-			@Override
-			public void run() {
-				
-				/*
-				 * get the tag from the checkBox, which is set in the cursor to
-				 * be the row ID Then delete based on the row ID after a short
-				 * delay
-				 */
-				long id = (Long) v.getTag();
-				Uri uri = Uri.parse(MyTaskContentProvider.CONTENT_URI + "/"
-						+ id);
-				getContentResolver().delete(uri, null, null);
-				fillData();
-			}
-		}, 500);
 
 		Log.e("TASK", "onClick : ");
 	}
 
-	@Override
-	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		String[] projection = { TaskTable.COLUMN_ID, TaskTable.COLUMN_SUMMARY };
-		CursorLoader cursorLoader = new CursorLoader(this,
-				MyTaskContentProvider.CONTENT_URI, projection, null, null, null);
-		return cursorLoader;
-	}
 
-	@Override
-	public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor data) {
-		adapter.swapCursor(data);
-
-	}
-
-	@Override
-	public void onLoaderReset(Loader<Cursor> arg0) {
-		adapter.swapCursor(null);
-
-	}
 }
