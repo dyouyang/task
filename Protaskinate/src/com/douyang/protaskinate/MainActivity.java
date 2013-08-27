@@ -4,10 +4,13 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 /**
  * @author yinglong The main listView activity that displays all current tasks.
@@ -18,6 +21,9 @@ public class MainActivity extends Activity {
 	FragmentManager fragmentManager;
 	
 	MainFragment mainFragment;
+	
+	private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -38,8 +44,20 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		//get the fragment for the task list. We need to do this for passing the onCheck callback
 		fragmentManager = getFragmentManager();
 		mainFragment = (MainFragment) fragmentManager.findFragmentById(R.id.main_fragment);
+		
+		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        
+     String [] mPlanetTitles = {"All Tasks", "Personal", "Work", "Shopping"};
+     
+		// Set the adapter for the list view
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+                R.layout.drawer_list_item, mPlanetTitles));
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
 	}
 

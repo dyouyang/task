@@ -11,20 +11,26 @@
         android:layout_height="match_parent" />
     <!-- The navigation drawer -->
 
+    <TextView
+        android:id="@+id/drawer_top_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Test" />
+
     <ListView
         android:id="@+id/left_drawer"
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#111"
+        android:background="#eee"
         android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp" />
+        android:divider="#AA66CC"
+        android:dividerHeight="1px" />
 
     <fragment
         android:id="@+id/main_fragment"
         android:name="com.douyang.protaskinate.MainFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-    
+
 </android.support.v4.widget.DrawerLayout>
