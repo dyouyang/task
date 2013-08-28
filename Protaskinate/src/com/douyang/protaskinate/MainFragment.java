@@ -45,7 +45,7 @@ public class MainFragment extends Fragment implements LoaderCallbacks<Cursor> {
 		// TODO Auto-generated method stub
 		super.onCreateView(inflater, container, savedInstanceState);
 		
-		View view = inflater.inflate(R.layout.drawer_layout, container, false);
+		View view = inflater.inflate(R.layout.main_task_list, container, false);
 		listViewTasks = (ListView) view.findViewById(R.id.listView1);
 
 		// populate the list
@@ -88,7 +88,7 @@ public class MainFragment extends Fragment implements LoaderCallbacks<Cursor> {
 		String[] from = new String[] { TaskTable.COLUMN_SUMMARY };
 		int[] to = new int[] { R.id.textView1 };
 		getLoaderManager().initLoader(0, null, this);
-		adapter = new MyCursorAdapter(this.getActivity(), R.layout.task_row, null, from, to,
+		adapter = new MyCursorAdapter(this.getActivity(), R.layout.main_task_item, null, from, to,
 				0);
 
 		listViewTasks.setAdapter(adapter);
