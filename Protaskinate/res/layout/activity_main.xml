@@ -9,37 +9,25 @@
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-    
-    
-    <!-- The navigation drawer -->
-    <LinearLayout
-        android:id="@+id/drawer_outer_layout"
-        android:layout_width="240dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="#eee"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/drawer_top_text"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_gravity="center_vertical" />
-
-        <ListView
-            android:id="@+id/left_drawer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:choiceMode="singleChoice"
-            android:divider="#AA66CC"
-            android:dividerHeight="1px" />
-    </LinearLayout>
 
     <!-- The main task list fragment -->
+
     <fragment
         android:id="@+id/main_fragment"
         android:name="com.douyang.protaskinate.MainFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <!-- The navigation drawer -->
+
+    <ListView
+        android:id="@+id/left_drawer"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="#eee"
+        android:choiceMode="singleChoice"
+        android:divider="#AA66CC"
+        android:dividerHeight="1px" />
 
 </android.support.v4.widget.DrawerLayout>
