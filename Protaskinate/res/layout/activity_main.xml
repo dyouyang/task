@@ -11,21 +11,28 @@
         android:layout_height="match_parent" />
     <!-- The navigation drawer -->
 
-    <TextView
-        android:id="@+id/drawer_top_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Test" />
-
-    <ListView
-        android:id="@+id/left_drawer"
+    <LinearLayout
+        android:id="@+id/drawer_outer_layout"
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="#eee"
-        android:choiceMode="singleChoice"
-        android:divider="#AA66CC"
-        android:dividerHeight="1px" />
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/drawer_top_text"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical" />
+
+        <ListView
+            android:id="@+id/left_drawer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:choiceMode="singleChoice"
+            android:divider="#AA66CC"
+            android:dividerHeight="1px" />
+    </LinearLayout>
 
     <fragment
         android:id="@+id/main_fragment"
